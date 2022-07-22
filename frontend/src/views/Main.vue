@@ -10,9 +10,8 @@
         Take this survey to find out.
       </div>
     </div>
-    <el-main class="flex flex-col items-center ">
+    <el-main class="flex flex-col items-center">
       <el-button
-        type="success"
         round
         @click="startSurvey"
       >
