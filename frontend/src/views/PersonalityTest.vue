@@ -28,12 +28,18 @@
           <div class="question">
             {{ q.question }}
           </div>
-          <div class="answer mx-3 my-3">
-            {{ q.answers.find(answer => answer.id === selectedAnswers[i]).title }}
+          <div class="answer mx-3 my-3 text-lime-500">
+            <i class="el-icon-caret-right" />{{ q.Answers.find(answer => answer.id === selectedAnswers[i]).title }}
+          </div>
+          <div
+            v-if="i < questions.length - 1"
+            class="my-2"
+          >
+            <div class="border w-full" />
           </div>
         </div>
 
-        <div class="w-full flex justify-center">
+        <div class="w-full flex justify-center mt-10">
           <el-button
             type="success"
             icon="el-icon-check"
@@ -68,6 +74,7 @@
 
 <script>
 import QuestionAnswers from "@/components/QuestionAnswers"
+import {postRequest} from "@/utils"
 export default {
 	name: "PersonalityTest",
 	components: {
@@ -77,52 +84,7 @@ export default {
 		return {
 			active: 0,
 			selectedAnswers:[],
-			questions: [{
-				id: 1,
-				question: "The question 1",
-				answers:[
-					{id:1, title:"The first answer asdf aksd fas jkas kajhsf kjlasdf lkjahsd flkgajsdf hklgasd fghalsdfg lasdg fla fsgs"},
-					{id:2, title:"The second answer asdf aksd fas jkas kajhsf kjlasdf lkjahsd flkgajsdf hklgasd fghalsdfg lasdg fla fsgs"},
-					{id:3, title:"The third answer asdf aksd fas jkas kajhsf kjlasdf lkjahsd flkgajsdf hklgasd fghalsdfg lasdg fla fsgs"},
-					{id:4, title:"The forth answer asdf aksd fas jkas kajhsf kjlasdf lkjahsd flkgajsdf hklgasd fghalsdfg lasdg fla fsgs"},
-				]
-			},{
-				id: 2,
-				question: "The question 2",
-				answers:[
-					{id:1, title:"The first answer asdf aksd fas jkas kajhsf kjlasdf lkjahsd flkgajsdf hklgasd fghalsdfg lasdg fla fsgs"},
-					{id:2, title:"The second answer asdf aksd fas jkas kajhsf kjlasdf lkjahsd flkgajsdf hklgasd fghalsdfg lasdg fla fsgs"},
-					{id:3, title:"The third answer asdf aksd fas jkas kajhsf kjlasdf lkjahsd flkgajsdf hklgasd fghalsdfg lasdg fla fsgs"},
-					{id:4, title:"The forth answer asdf aksd fas jkas kajhsf kjlasdf lkjahsd flkgajsdf hklgasd fghalsdfg lasdg fla fsgs"},
-				]
-			},{
-				id: 3,
-				question: "The question 3",
-				answers:[
-					{id:1, title:"The first answer asdf aksd fas jkas kajhsf kjlasdf lkjahsd flkgajsdf hklgasd fghalsdfg lasdg fla fsgs"},
-					{id:2, title:"The second answer asdf aksd fas jkas kajhsf kjlasdf lkjahsd flkgajsdf hklgasd fghalsdfg lasdg fla fsgs"},
-					{id:3, title:"The third answer asdf aksd fas jkas kajhsf kjlasdf lkjahsd flkgajsdf hklgasd fghalsdfg lasdg fla fsgs"},
-					{id:4, title:"The forth answer asdf aksd fas jkas kajhsf kjlasdf lkjahsd flkgajsdf hklgasd fghalsdfg lasdg fla fsgs"},
-				]
-			},{
-				id: 4,
-				question: "The question 4",
-				answers:[
-					{id:1, title:"The first answer asdf aksd fas jkas kajhsf kjlasdf lkjahsd flkgajsdf hklgasd fghalsdfg lasdg fla fsgs"},
-					{id:2, title:"The second answer asdf aksd fas jkas kajhsf kjlasdf lkjahsd flkgajsdf hklgasd fghalsdfg lasdg fla fsgs"},
-					{id:3, title:"The third answer asdf aksd fas jkas kajhsf kjlasdf lkjahsd flkgajsdf hklgasd fghalsdfg lasdg fla fsgs"},
-					{id:4, title:"The forth answer asdf aksd fas jkas kajhsf kjlasdf lkjahsd flkgajsdf hklgasd fghalsdfg lasdg fla fsgs"},
-				]
-			},{
-				id: 5,
-				question: "The question 5",
-				answers:[
-					{id:1, title:"The first answer asdf aksd fas jkas kajhsf kjlasdf lkjahsd flkgajsdf hklgasd fghalsdfg lasdg fla fsgs"},
-					{id:2, title:"The second answer asdf aksd fas jkas kajhsf kjlasdf lkjahsd flkgajsdf hklgasd fghalsdfg lasdg fla fsgs"},
-					{id:3, title:"The third answer asdf aksd fas jkas kajhsf kjlasdf lkjahsd flkgajsdf hklgasd fghalsdfg lasdg fla fsgs"},
-					{id:4, title:"The forth answer asdf aksd fas jkas kajhsf kjlasdf lkjahsd flkgajsdf hklgasd fghalsdfg lasdg fla fsgs"},
-				]
-			},],
+			questions: [],
 		}
 	},
 	computed:{
@@ -131,7 +93,15 @@ export default {
 		}
 	},
 	created(){
-		this.shuffleAllAnswers()
+		postRequest("/question/all").then(res => {
+			console.log({res})
+			if(Array.isArray(res?.data)){
+				this.questions = res.data
+				this.shuffleAllAnswers()
+			}
+		}).catch(err => {
+			console.log(err)
+		})
 	},
 	methods: {
 		previous() {
@@ -147,7 +117,7 @@ export default {
 		},
 		shuffleAllAnswers(){
 			this.questions.forEach(question => {
-				this.$set(question, 'answers', this.shuffleArray(question.answers))
+				this.$set(question, 'Answers', this.shuffleArray(question.Answers))
 			})
 		},
 		shuffleArray(array){

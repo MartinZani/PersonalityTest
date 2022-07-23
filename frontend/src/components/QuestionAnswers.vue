@@ -2,25 +2,32 @@
   <div
     class="content rounded-lg shadow-md bg-slate-100 w-full"
   >
-    <div
-      v-if="questionAnswers"
-      class="question m-4 question"
+    <transition
+      name="fade"
+      mode="out-in"
     >
-      {{ questionAnswers.question }}
-    </div>
-    <div
-      v-if="questionAnswers"
-      class="answer-container container"
-    >
-      <AnswerElement
-        v-for="a in questionAnswers.answers"
-        :key="a.id"
-        :element="a"
-        :selected="selectedAnswer === a.id"
-        @selectElement="setSelectedAnswer"
-      />
-    </div>
-    <slot />
+      <div :key="questionAnswers.question">
+        <div
+          v-if="questionAnswers"
+          class="question m-4 question"
+        >
+          {{ questionAnswers.question }}
+        </div>
+        <div
+          v-if="questionAnswers"
+          class="answer-container container"
+        >
+          <AnswerElement
+            v-for="a in questionAnswers.Answers"
+            :key="a.id"
+            :element="a"
+            :selected="selectedAnswer === a.id"
+            @selectElement="setSelectedAnswer"
+          />
+        </div>
+        <slot />
+      </div>
+    </transition>
   </div>
 </template>
 
@@ -51,6 +58,3 @@ export default {
 	}
 }
 </script>
-
-<style lang="scss">
-</style>
