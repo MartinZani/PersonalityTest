@@ -12,7 +12,7 @@
     </el-steps>
 
     <QuestionAnswers
-      class="sm:m-8 sm:p-8 sm:w-full md:w-104"
+      class="p-3 sm:m-8 sm:p-8 sm:w-full md:w-4/5 lg:2-3/5 xl:2-2/5"
       :question-answers="questions[active]"
       :selected-answer="selectedAnswers[active]"
       @answerSelected="selectAnswer"

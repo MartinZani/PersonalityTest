@@ -1,7 +1,8 @@
 <template>
   <div
-    class="container rounded border border-solid border-gray-300 p-3 my-3 answer flex justify-between w-full"
+    class="container rounded border border-solid border-gray-300 p-3 my-3 answer flex justify-between items-center w-full"
     :class="{'border-green-700':selected}"
+    :style="{'background-color': (selected ? 'rgba(21, 128, 61, 0.2)': 'unset')}"
     @click="fire"
   >
     <div>{{ element.title }}</div>
