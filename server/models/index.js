@@ -1,5 +1,3 @@
-'use strict';
-
 const fs = require('fs');
 const path = require('path');
 const Sequelize = require('sequelize');
@@ -8,7 +6,13 @@ const env = process.env.NODE_ENV || 'development';
 const config = require(__dirname + '/../config/config.json')[env];
 const db = {};
 
-let sequelize = new Sequelize('sqlite::memory:');
+let sequelize;
+
+if (config.use_env_variable) {
+  sequelize = new Sequelize(config);
+} else {
+  sequelize = new Sequelize(config);
+}
 
 fs
   .readdirSync(__dirname)
@@ -24,6 +28,13 @@ Object.keys(db).forEach(modelName => {
   if (db[modelName].associate) {
     db[modelName].associate(db);
   }
+});
+
+db.Question.Answers = db.Question.hasMany(db.Answer,{
+  foreignKey: 'question_id'
+});
+db.Answer.Point = db.Answer.hasOne(db.Point,{
+  foreignKey: 'answer_id'
 });
 
 db.sequelize = sequelize;

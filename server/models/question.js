@@ -1,25 +1,17 @@
 module.exports = (Sequelize, DataTypes) => {
     const Question = Sequelize.define('Question', {
         id: {
-            type: DataTypes.INTEGER,
+            type: DataTypes.UUID,
             primaryKey: true,
-            autoIncrement: true,
+            defaultValue: DataTypes.UUIDV4
         },
         question: {
             type: DataTypes.STRING
-        },
-        points: {
-            type: DataTypes.NUMBER
         }
     }, {
-        // indexes: [{
-        //     unique: false,
-        //     fields: ['name'],
-        // }],
         charset: 'utf8',
         collate: 'utf8_general_ci',
-        timestamps: true,
-        paranoid: true,
+        timestamps: false
     })
 
     Question.sync()
