@@ -13,9 +13,6 @@ var corsOptions = {
 };
 
 const db = require("./models");
-const {
-    default: axios
-} = require("axios");
 db.sequelize.sync();
 
 app.use(cors(corsOptions));

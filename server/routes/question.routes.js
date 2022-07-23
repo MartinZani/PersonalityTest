@@ -1,10 +1,4 @@
-const {
-    default: axios
-} = require("axios")
-
-const db = require("../models")
-const sequelize = db.Sequelize;
-const Op = db.Sequelize.Op
+let  questionController = require('../controllers/questions.controller');
 
 module.exports = app => {
 
@@ -12,22 +6,20 @@ module.exports = app => {
         res.header(
             "Access-Control-Allow-Headers",
             "x-access-token, Origin, Content-Type, Accept"
-        )
-        next()
+        );
+        next();
     })
 
-    let router = require("express").Router()
+    let router = require("express").Router();
 
 
-    router.post("/",  async (req, res) => {
-        let userId = req.body.userId
+    router.post("/all",  async (req, res) => {
         try {
-            return res.json({message: "Success"})
+            return res.json(await questionController.getAll());
         } catch (e) {
-            db.Log.create({user: userId, errorObject: JSON.stringify(e), routePath: "/api/main/testFatura"})
-            return res.status(500).json({message: "Server error"}).send()
+            return res.status(500).json({message: "Server error"}).send();
         }
-    })
+    });
 
-    app.use('/api/question', router)
+    app.use('/api/question', router);
 }
