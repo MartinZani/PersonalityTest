@@ -8,7 +8,7 @@ const app = express();
 
 //disable cors on localhost
 var corsOptions = {
-    origin: "localhost",
+    origin: "*",
     methods: ['GET', 'POST', 'DELETE', 'UPDATE', 'PUT', 'PATCH']
 };
 
