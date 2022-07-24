@@ -2,6 +2,12 @@
   <div
     class="content rounded-lg shadow-md bg-slate-100 w-full"
   >
+    <div
+      v-if="!$slots.default"
+      class="text-xs italic flex justify-center"
+    >
+      *All questions are required!
+    </div>
     <transition
       name="fade"
       mode="out-in"
@@ -9,7 +15,7 @@
       <div :key="questionAnswers.question">
         <div
           v-if="questionAnswers"
-          class="question m-4 question"
+          class="m-4 question"
         >
           {{ questionAnswers.question }}
         </div>
@@ -58,3 +64,9 @@ export default {
 	}
 }
 </script>
+<style scoped>
+	.desclimer {
+		font-family: 'Edu SA Beginner', cursive;
+		user-select: none;
+	}
+</style>

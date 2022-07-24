@@ -3,7 +3,7 @@
     <el-steps
       :active="active"
       finish-status="success"
-      class="w-full md:w-3/5 p-5"
+      class="w-full p-5 m-1 md:w-96 "
     >
       <el-step
         v-for="question in questions"
@@ -18,7 +18,7 @@
       @answerSelected="selectAnswer"
     >
       <div
-        v-if="active === questions.length && questions.length > 0"
+        v-if="active === questions.length && questions.length > 0 && !hasResults"
         class="p-2"
       >
         <div
@@ -45,14 +45,36 @@
             icon="el-icon-check"
             round
             plain
+            @click="submit"
           >
             Submit
           </el-button>
         </div>
       </div>
+
+      <div v-if="hasResults">
+        <div class="title">
+          {{ resultsObj.title }}
+        </div>
+        <div class="description">
+          {{ resultsObj.message }}
+        </div>
+
+        <div class="w-full flex justify-center mt-10">
+          <el-button
+            type="success"
+            icon="el-icon-check"
+            round
+            plain
+            @click="reset"
+          >
+            Retake test
+          </el-button>
+        </div>
+      </div>
     </QuestionAnswers>
 
-    <div class="mt-5">
+    <div class="mt-5" v-if="!hasResults">
       <el-button
         v-if="active > 0"
         style="margin-top: 12px;"
@@ -85,6 +107,8 @@ export default {
 			active: 0,
 			selectedAnswers:[],
 			questions: [],
+			hasResults: false,
+			resultsObj:{}
 		}
 	},
 	computed:{
@@ -94,10 +118,9 @@ export default {
 	},
 	created(){
 		postRequest("/question/all").then(res => {
-			console.log({res})
 			if(Array.isArray(res?.data)){
 				this.questions = res.data
-				this.shuffleAllAnswers()
+				// this.shuffleAllAnswers()
 			}
 		}).catch(err => {
 			console.log(err)
@@ -122,6 +145,23 @@ export default {
 		},
 		shuffleArray(array){
 			return array.sort(() => 0.5 - Math.random())
+		},
+		submit(){
+			let questionAnswersObj = this.questions.map((el, i) => Object.assign({[el.id]: this.selectedAnswers[i]}))
+			postRequest("/question/submit",{questionAnswersObj}).then(res => {
+				if(res?.data){
+					this.hasResults = true
+					this.resultsObj = Object.assign(res.data)
+				}
+			}).catch(err => {
+				console.log(err)
+			})
+		},
+		reset(){
+			this.active = 0,
+			this.selectedAnswers = []
+			this.hasResults = false
+			this.resultsObj = Object.assign({})
 		}
 	}
 }
@@ -133,7 +173,16 @@ export default {
 		font-size: larger;
 		user-select: none;
 	}
+	.title {
+		font-family: 'Edu VIC WA NT Beginner', cursive;
+		user-select: none;
+	}
 	.answer {
+		font-family: 'Edu SA Beginner', cursive;
+		font-size: smaller;
+		user-select: none;
+	}
+	.description {
 		font-family: 'Edu SA Beginner', cursive;
 		font-size: smaller;
 		user-select: none;
