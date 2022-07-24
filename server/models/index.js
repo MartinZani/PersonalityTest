@@ -30,12 +30,8 @@ Object.keys(db).forEach(modelName => {
   }
 });
 
-db.Question.Answers = db.Question.hasMany(db.Answer,{
-  foreignKey: 'question_id'
-});
-db.Answer.Point = db.Answer.hasOne(db.Point,{
-  foreignKey: 'answer_id'
-});
+db.Question.Answers = db.Question.hasMany(db.Answer);
+db.Answer.Point = db.Answer.hasOne(db.Point);
 
 db.sequelize = sequelize;
 db.Sequelize = Sequelize;
