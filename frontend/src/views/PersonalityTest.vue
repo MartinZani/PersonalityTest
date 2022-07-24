@@ -74,7 +74,10 @@
       </div>
     </QuestionAnswers>
 
-    <div class="mt-5" v-if="!hasResults">
+    <div
+      v-if="!hasResults"
+      class="mt-5"
+    >
       <el-button
         v-if="active > 0"
         style="margin-top: 12px;"
@@ -96,7 +99,7 @@
 
 <script>
 import QuestionAnswers from "@/components/QuestionAnswers"
-import {postRequest} from "@/utils"
+import {postRequest, getRequest} from "@/utils"
 export default {
 	name: "PersonalityTest",
 	components: {
@@ -117,7 +120,7 @@ export default {
 		}
 	},
 	created(){
-		postRequest("/question/all").then(res => {
+		getRequest("/question/all").then(res => {
 			if(Array.isArray(res?.data)){
 				this.questions = res.data
 				// this.shuffleAllAnswers()

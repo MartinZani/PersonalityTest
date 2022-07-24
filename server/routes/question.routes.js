@@ -13,7 +13,7 @@ module.exports = app => {
     let router = require("express").Router();
 
 
-    router.post("/all",  async (req, res) => {
+    router.get("/all",  async (req, res) => {
         try {
             return res.json(await questionController.getAll());
         } catch (e) {
@@ -24,6 +24,10 @@ module.exports = app => {
 
     router.post("/submit",  async (req, res) => {
         let questionAnswersObj = req?.body?.questionAnswersObj
+        if(questionAnswersObj.length < 5){
+            return res.status(500).json({message: "Server error"}).send();
+        }
+
         try {
             let r = await questionController.fetchPoints(questionAnswersObj);
             let total = r.reduce((currentSum, el) => currentSum + el.Point.points, 0)
