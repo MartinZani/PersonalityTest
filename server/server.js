@@ -13,7 +13,7 @@ var corsOptions = {
 };
 
 const db = require("./models");
-db.sequelize.sync();
+db.sequelize.sync(/* {force: true} */);
 
 app.use(cors(corsOptions));
 
